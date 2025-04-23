@@ -23,16 +23,15 @@ O **Mapa da Dor** tem como objetivo facilitar a comunicação entre crianças e 
 ## ⚙️ Funcionalidades
 
 ### Área do Médico
-- Buscar paciente por ID, nome ou RG
-- Registrar e remover sintomas
-- Registrar exames
-- Gerar relatório dos pacientes em CSV
-- Remover pacientes
-- Listar todos os pacientes
+- Registro de Sintomas: Médicos podem registrar sintomas e exames dos pacientes, enquanto pacientes podem informar sintomas específicos.
+
+- Exclusão e Busca de Pacientes: O sistema permite excluir ou buscar pacientes registrados.
+
+- Relatório de Pacientes: O sistema gera um arquivo CSV contendo informações de todos os pacientes cadastrados, incluindo sintomas e exames.
 
 ### Área do Paciente
-- Cadastro de novo paciente
-- Registro de sintomas
+- Cadastro de Pacientes: Permite o cadastro de novos pacientes, incluindo informações pessoais e identificadoras.
+- Registro de Sintomas: Médicos podem registrar sintomas e exames dos pacientes, enquanto pacientes podem informar sintomas específicos.
 
 ---
 
@@ -60,17 +59,51 @@ env
 AWS_ACCESS_KEY_ID=your_access_key
 AWS_SECRET_ACCESS_KEY=your_secret_key
 
-## Como Executar
+## Funcionamento do Sistema
+### Banco de Dados DynamoDB
+O projeto utiliza o AWS DynamoDB para armazenar informações dos pacientes, sintomas e exames. As tabelas essenciais são:
 
-Este sistema roda via terminal.
+- Pacientes: Armazena as informações pessoais de cada paciente, como nome, idade, sexo, RG, etc.
+
+- Sintomas: Armazena os sintomas registrados para cada paciente, relacionados a diferentes partes do corpo.
+
+### Fluxo de Execução
+- Cadastro de Pacientes: O responsável do paciente realiza o cadastro, fornecendo as informações necessárias.
+
+- Registro de Sintomas: O médico ou paciente registra os sintomas do paciente em diferentes partes do corpo. O sistema oferece uma lista de sintomas pré-definidos para facilitar a escolha.
+
+- Exame e Resultados: Os médicos podem registrar exames realizados, bem como os resultados obtidos.
+
+- Busca e Remoção de Pacientes: O sistema permite ao médico buscar pacientes por nome ou RG, além de remover registros de pacientes.
+
+- Relatórios: O sistema gera relatórios em formato CSV com as informações dos pacientes, sintomas e exames.
+
+## Como Executar
 
 Após instalar as dependências e configurar suas variáveis de ambiente:
 
 ```bash
 python main.py
 ```
+A interação com o sistema é feita via terminal. O menu de opções é exibido a cada etapa e o usuário deve selecionar uma opção através de números correspondentes.
 
-## Relatórios
+### Exemplo de Menu
+```
+Sistema Hospital Sabará
+Você é:
+1 - Médico
+2 - Paciente
+0 - Sair
+```
+
+### Instruções:
+O usuário deverá digitar 1, 2, 3, etc para selecionar a ação desejada.
+
+Cada número corresponde a uma funcionalidade específica. O sistema processará a seleção e, dependendo da escolha, executará a ação correspondente.
+
+Caso o número não corresponda a uma opção válida, o sistema solicitará uma nova entrada até que uma opção válida seja escolhida.
+
+### Relatórios
 
 Geração de relatório automática em .csv com os seguintes dados:
 
