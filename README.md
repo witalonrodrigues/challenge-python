@@ -67,6 +67,10 @@ O projeto utiliza o AWS DynamoDB para armazenar informações dos pacientes, sin
 
 - Sintomas: Armazena os sintomas registrados para cada paciente, relacionados a diferentes partes do corpo.
 
+## Diagrama
+![python-diagrama](https://github.com/user-attachments/assets/f02e16ff-b695-4eb4-99af-9478c9688b77)
+
+
 ### Fluxo de Execução
 - Cadastro de Pacientes: O responsável do paciente realiza o cadastro, fornecendo as informações necessárias.
 
@@ -112,5 +116,8 @@ Geração de relatório automática em .csv com os seguintes dados:
 - Gênero
 - Sintomas
 
-## Autor
-Desenvolvido por: Witalon Antonio Rodrigues - RM559023
+## Autores
+- Lucas Alves Piereti - RM559533
+- Rafaela Heer Robinson - RM560249
+- Julia Hadja Kfouri Nunes - RM559410
+- Witalon Antonio Rodrigues - RM559023
