@@ -68,7 +68,8 @@ O projeto utiliza o AWS DynamoDB para armazenar informações dos pacientes, sin
 - Sintomas: Armazena os sintomas registrados para cada paciente, relacionados a diferentes partes do corpo.
 
 ## Diagrama
-![python-diagrama](https://github.com/user-attachments/assets/f02e16ff-b695-4eb4-99af-9478c9688b77)
+![python drawio](https://github.com/user-attachments/assets/3163a569-7f2e-45bb-8b33-f1718e1f0752)
+
 
 
 ### Fluxo de Execução
