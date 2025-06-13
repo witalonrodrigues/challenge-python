@@ -3,6 +3,7 @@ import uuid
 import boto3
 from dotenv import load_dotenv
 import os
+from tabulate import tabulate
 
 load_dotenv()
 
@@ -16,7 +17,6 @@ dynamodb = boto3.resource(
     aws_secret_access_key=aws_secret_access_key
 )
 tabela_paciente = dynamodb.Table("Pacientes")
-tabela_medico = dynamodb.Table("Medicos")
 
 mapa_sintomas = {
     "pé": ["dor", "formigamento", "coceira", "frio"],
@@ -35,6 +35,8 @@ mapa_sintomas = {
     "ouvido": ["dor", "coceira", "surdez"],
     "cabeça": ["dor", "coceira", "tontura"]
 }
+
+medicos_credenciais = {}
 
 
 def forca_opcao(msg, lista, msg_erro):
@@ -248,7 +250,79 @@ def visualizar_todos_pacientes():
     except Exception as e:
         print(f"Erro ao buscar pacientes: {e}")
 
+def ler_csv_relatorio():
+    try:
+        df = pd.read_csv('relatorio_de_pacientes.csv', sep=';', encoding='utf-8-sig')
+        print("\nRelatório de Pacientes:\n")
+        print(tabulate(df, headers='keys', tablefmt='fancy_grid', showindex=False))
+    except FileNotFoundError:
+        print("Arquivo 'relatorio_de_pacientes.csv' não encontrado.")
+    except Exception as e:
+        print(f"Erro ao ler o relatório: {e}")
 
+def cadastrar_medico():
+    print("\nCadastro de Médico")
+    crm = input("Informe o CRM: ")
+    if crm in medicos_credenciais:
+        print("CRM já cadastrado.")
+        return False
+    senha = input("Crie uma senha: ")
+    medicos_credenciais[crm] = senha
+    print("Cadastro realizado com sucesso!")
+    return True
+
+def login_medico():
+    print("\nLogin de Médico")
+    crm = input("CRM: ")
+    senha = input("Senha: ")
+    if crm in medicos_credenciais and medicos_credenciais[crm] == senha:
+        print("Login bem-sucedido!\n")
+        return True
+    else:
+        print("CRM ou senha incorretos.")
+        return False
+
+def autenticar_medico():
+    while True:
+        print("\n[Autenticação de Médico]")
+        print("1 - Login")
+        print("2 - Cadastro")
+        print("0 - Voltar ao menu principal")
+        acao = input("Escolha uma opção: ")
+
+        if acao == '1':
+            while True:
+                print("\n[Login de Médico]")
+                crm = input("CRM (ou 0 para voltar): ")
+                if crm == '0':
+                    return False
+                senha = input("Senha: ")
+
+                if crm in medicos_credenciais and medicos_credenciais[crm] == senha:
+                    print("Login bem-sucedido!\n")
+                    return True
+                else:
+                    print("\nCRM ou senha incorretos.")
+                    print("1 - Tentar novamente")
+                    print("2 - Voltar ao menu principal")
+                    tentativa = input("Escolha uma opção: ")
+                    if tentativa == '2':
+                        return False
+        elif acao == '2':
+            print("\n[Cadastro de Médico]")
+            crm = input("Informe o CRM (ou 0 para voltar): ")
+            if crm == '0':
+                return False
+            if crm in medicos_credenciais:
+                print("CRM já cadastrado.")
+                continue
+            senha = input("Crie uma senha: ")
+            medicos_credenciais[crm] = senha
+            print("Cadastro realizado com sucesso!")
+        elif acao == '0':
+            return False
+        else:
+            print("Opção inválida.")
 menu_medico = {
     "1": registrar_exame,
     "2": visualizar_pacientes,
@@ -257,7 +331,7 @@ menu_medico = {
     "5": registrar_sintomas,
     "6": remover_sintoma,
     "7": gerar_relatorio,
-    "8": visualizar_todos_pacientes
+    "8": ler_csv_relatorio
 }
 
 menu_paciente = {
@@ -277,43 +351,61 @@ def menu():
         tipo_usuario = forca_opcao('\nEscolha uma opção\n-> ', ['1', '2', '0'], 'Opção inválida. Tente novamente.')
 
         if tipo_usuario == "1":
+            autenticar_medico()
             while True:
-                print("\n Menu Médico")
-                print("1 - Registrar Exame")
-                print("2 - Visualizar Paciente")
-                print("3 - Buscar Paciente")
-                print("4 - Remover Paciente")
-                print("5 - Registrar Sintomas")
-                print("6 - Remover Sintomas")
-                print("7 - Gerar Relatório CSV")
-                print("0 - Voltar")
+                while True:
+                    print("\n Sistema Hospital Sabará")
+                    print("Você é:")
+                    print("1 - Médico")
+                    print("2 - Paciente")
+                    print("0 - Sair")
 
-                opcao = forca_opcao("\nEscolha uma opção\n-> ", ['1', '2', '3', '4', '5', '6', '7', '8', '0'],
-                                    "Opção inválida. Tente novamente.")
+                    tipo_usuario = forca_opcao('\nEscolha uma opção\n-> ', ['1', '2', '0'],
+                                               'Opção inválida. Tente novamente.')
 
-                if opcao == "0":
-                    break
-                else:
-                    menu_medico[opcao]()
+                    if tipo_usuario == "1":
+                        if autenticar_medico():
+                            while True:
+                                print("\n Menu Médico")
+                                print("1 - Registrar Exame")
+                                print("2 - Visualizar Paciente")
+                                print("3 - Buscar Paciente")
+                                print("4 - Remover Paciente")
+                                print("5 - Registrar Sintomas")
+                                print("6 - Remover Sintomas")
+                                print("7 - Gerar Relatório CSV")
+                                print("8 - Ler Relatório CSV")
+                                print("0 - Voltar")
 
-        elif tipo_usuario == "2":
-            while True:
-                print("\nMenu Paciente")
-                print("1 - Fazer o cadastro")
-                print("2 - Registrar Sintoma")
-                print("0 - Voltar")
+                                opcao = forca_opcao("\nEscolha uma opção\n-> ",
+                                                    ['1', '2', '3', '4', '5', '6', '7', '8', '0'],
+                                                    "Opção inválida. Tente novamente.")
 
-                opcao = forca_opcao("Escolha uma opção\n-> ", ['1', '2', '0'], "Opção inválida. Tente novamente.")
+                                if opcao == "0":
+                                    break
+                                else:
+                                    menu_medico[opcao]()
+                        else:
+                            continue
 
-                if opcao == '0':
-                    break
-                else:
-                    menu_paciente[opcao]()
+                    elif tipo_usuario == "2":
+                        while True:
+                            print("\nMenu Paciente")
+                            print("1 - Fazer o cadastro")
+                            print("2 - Registrar Sintoma")
+                            print("0 - Voltar")
 
+                            opcao = forca_opcao("Escolha uma opção\n-> ", ['1', '2', '0'],
+                                                "Opção inválida. Tente novamente.")
 
-        elif tipo_usuario == "0":
-            print("Saindo do sistema...")
-            break
+                            if opcao == '0':
+                                break
+                            else:
+                                menu_paciente[opcao]()
+
+                    elif tipo_usuario == "0":
+                        print("Saindo do sistema...")
+                        break
 
 
 if __name__ == "__main__":
