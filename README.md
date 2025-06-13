@@ -111,7 +111,8 @@ def menu_medico():
     """
 
 ## Diagrama
-![python drawio](https://github.com/user-attachments/assets/3163a569-7f2e-45bb-8b33-f1718e1f0752)
+![diagrama_challenge](https://github.com/user-attachments/assets/e47e1ec6-571d-4506-b97e-4d0bc2ef309f)
+
 
 
 
