@@ -71,11 +71,13 @@ O projeto utiliza o AWS DynamoDB para armazenar informações dos pacientes, sin
 - Sintomas: Armazena os sintomas registrados para cada paciente, relacionados a diferentes partes do corpo.
 
 ## 🧠 Principais Funções no Código
+```
 def cadastrar_paciente(dynamodb=None):
     """
     Coleta os dados do paciente via input e os salva na tabela DynamoDB.
     Campos: nome, idade, gênero, RG, responsável.
     """
+
 
 def registrar_sintomas(nome, rg, dynamodb=None):
     """
@@ -109,6 +111,7 @@ def menu_medico():
     Exibe as opções disponíveis para médicos.
     Controla o fluxo de chamadas para funções como registro, exclusão e relatórios.
     """
+```
 
 ## Diagrama
 ![diagrama_challenge](https://github.com/user-attachments/assets/e47e1ec6-571d-4506-b97e-4d0bc2ef309f)
