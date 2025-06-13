@@ -6,7 +6,7 @@ Sistema interativo para gerenciamento de pacientes pediátricos, com foco no reg
 
 ## Sobre o Projeto
 
-O **Mapa da Dor** tem como objetivo facilitar a comunicação entre crianças e profissionais da saúde, permitindo o registro preciso de sintomas, exames e movimentações hospitalares. 
+O Mapa da Dor busca facilitar a comunicação entre crianças e profissionais da saúde, permitindo o registro preciso de sintomas, exames e movimentações hospitalares. O sistema é intuitivo, com menus dedicados para médicos e pacientes, além de integração com banco de dados e geração automática de relatórios.
 
 ---
 
@@ -17,12 +17,15 @@ O **Mapa da Dor** tem como objetivo facilitar a comunicação entre crianças e 
 - [Boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) – SDK da AWS para Python
 - [Pandas](https://pandas.pydata.org/) – análise e geração de relatórios
 - [python-dotenv](https://pypi.org/project/python-dotenv/) – gerenciamento de variáveis de ambiente
+- Tabulate - visualização de relatório
 
 ---
 
 ## ⚙️ Funcionalidades
 
 ### Área do Médico
+- Cadastro e Autenticação de Médicos
+  
 - Registro de Sintomas: Médicos podem registrar sintomas e exames dos pacientes, enquanto pacientes podem informar sintomas específicos.
 
 - Exclusão e Busca de Pacientes: O sistema permite excluir ou buscar pacientes registrados.
@@ -67,6 +70,46 @@ O projeto utiliza o AWS DynamoDB para armazenar informações dos pacientes, sin
 
 - Sintomas: Armazena os sintomas registrados para cada paciente, relacionados a diferentes partes do corpo.
 
+## 🧠 Principais Funções no Código
+def cadastrar_paciente(dynamodb=None):
+    """
+    Coleta os dados do paciente via input e os salva na tabela DynamoDB.
+    Campos: nome, idade, gênero, RG, responsável.
+    """
+
+def registrar_sintomas(nome, rg, dynamodb=None):
+    """
+    Permite ao médico registrar sintomas associados a regiões do corpo.
+    Sintomas são armazenados por partes como cabeça, tronco, membros etc.
+    """
+
+def ler_csv(path):
+    """
+    Lê e exibe um arquivo CSV com dados de pacientes e sintomas.
+    Utiliza pandas e tabulate para facilitar a visualização e análise.
+    """
+
+def gerar_relatorio_csv(dynamodb=None):
+    """
+    Exporta todos os registros da tabela de pacientes e sintomas para um arquivo .csv.
+    """
+
+def buscar_paciente_por_rg(rg, dynamodb=None):
+    """
+    Consulta o DynamoDB para buscar pacientes com base no RG.
+    """
+
+def excluir_paciente(nome, rg, dynamodb=None):
+    """
+    Exclui o registro de um paciente do banco de dados com base no nome e RG.
+    """
+
+def menu_medico():
+    """
+    Exibe as opções disponíveis para médicos.
+    Controla o fluxo de chamadas para funções como registro, exclusão e relatórios.
+    """
+
 ## Diagrama
 ![python drawio](https://github.com/user-attachments/assets/3163a569-7f2e-45bb-8b33-f1718e1f0752)
 
@@ -75,6 +118,8 @@ O projeto utiliza o AWS DynamoDB para armazenar informações dos pacientes, sin
 ### Fluxo de Execução
 - Cadastro de Pacientes: O responsável do paciente realiza o cadastro, fornecendo as informações necessárias.
 
+- Autenticação Médica: Médico autenticado com crm e senha para acessar seu menu.
+
 - Registro de Sintomas: O médico ou paciente registra os sintomas do paciente em diferentes partes do corpo. O sistema oferece uma lista de sintomas pré-definidos para facilitar a escolha.
 
 - Exame e Resultados: Os médicos podem registrar exames realizados, bem como os resultados obtidos.
@@ -82,6 +127,8 @@ O projeto utiliza o AWS DynamoDB para armazenar informações dos pacientes, sin
 - Busca e Remoção de Pacientes: O sistema permite ao médico buscar pacientes por nome ou RG, além de remover registros de pacientes.
 
 - Relatórios: O sistema gera relatórios em formato CSV com as informações dos pacientes, sintomas e exames.
+
+- Leitura de Arquivo: O sistema permite a leitura de relatórios CSV dentro da nomenclatura padrão (relatorio_de_pacientes.csv)
 
 ## Como Executar
 
